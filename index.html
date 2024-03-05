@@ -4,11 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="./css/style.css">
     <script src="./js/index.js"></script>
-    
+
 </head>
+
 <body>
+
+
     <h1>Hotel La Viña</h1>
     
+    <form id="formReserva">
+        
+        
+        <label for="titular">Nombre del titular de la reserva</label>
+        <input type="text" id="titular" name="titular" required>
+        
+        <label for="identificacion">DNI o Pasaporte</label>
+        <input type="text" id="identificacion" name="identificacion" required>
+        
+        <label for="edad">Edad del titular</label>
+        <input type="number" id="edad" name="edad" required>
+        
+        <h3 id="aviso" style="display: none; color: red;">Debés ser mayor de 18 años para realizar una reserva.</h3>
+
+        <div id="otrosCampos" style="display: none;">
+            <label for="fecha">Fecha de ingreso</label>
+            <input type="date" id="ingreso" name="ingreso" required>
+
+            <label for="noches">Cantidad de noches</label>
+            <input type="number" id="noches" placeholder="0" name="noches" required>
+
+            <label for="huespedesMayores">Huéspedes de 12 años o más</label>
+            <input type="number" id="huespedesMayores" placeholder="0" name="huespedesMayores" required>
+
+            <label for="huespedesMenores">Huéspedes menores de 12 años</label>
+            <input type="number" id="huespedesMenores" placeholder="0" name="huespedesMenores" required>
+
+            <label for="email">Correo electrónico</label>
+            <input type="email" class="email" placeholder="ejemplo@ejemplo.com" name="email" required>
+
+            <label for="telefono">Número de teléfono</label>
+            <input type="tel" class="telefono" placeholder="+549011564151411" name="telefono" required>
+
+            <label id="checkDesayuno">
+                <input type="checkbox" id="desayuno" name="desayuno">
+                Agregar desayuno
+            </label>
+            
+            <button type="button" id="calcularPrecio">Calcular precio</button>
+
+            <div id="precioTotal"></div>
+
+        </div>
+
+
+    </form>
+
 </body>
 </html>

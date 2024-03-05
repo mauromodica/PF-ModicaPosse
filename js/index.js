@@ -1,71 +1,61 @@
-    const EDAD = parseInt(prompt("Ingresá tu edad"));
-
-    if(EDAD >= 18) {
-
-        let nombre = prompt("Ingresá tu nombre y apellido para registrar la reserva. Este nombre se usará solo como referencia para la reserva, deberás ingresarlo nuevamente al registrar cada huésped.")
-
-        let noches = parseInt(prompt("Cantidad de noches de alojamiento"))
-
-        if (isNaN(noches) || noches <=0) {
-            alert("Ingresá un número válido para indicar la cantidad de noches de alojamiento.");
-        } else {
-            let cantidad = parseInt(prompt("Cantidad de personas"))
-
-            if (isNaN(cantidad) || cantidad <= 0) {
-                alert("Ingresá un número válido para indicar la cantidad de personas que se alojarán.")
-            } else {
-                let personas = [];
-
-                let contadorMenoresDe12 = 0;
-
-                let contadorMayoresDe12 = 0;
-
-                const PRECIO_MENORES_12 = 12000;
-
-                const PRECIO_MAYORES_12 = 16000;
-
-                const IVA = 1.21;
-
-                for (let i = 0; i < cantidad; i++) {
-                    let nombre = prompt(`Ingresá el nombre y apellido de la persona ${i + 1}:`);
-                    let edad = parseInt(prompt(`Ingresá la edad de la persona ${i + 1}:`));
-
-                    while (isNaN(edad) || edad < 0) {
-                        alert("Ingresá una edad válida");
-                        edad = parseInt(prompt(`Ingresá la edad de la persona ${i + 1}:`));
-                    }
-
-                    personas.push({nombre: nombre, edad: edad});
-
-                    if (edad < 12) {
-                        contadorMenoresDe12++;
-                    }
-
-                    if (edad >=12) {
-                        contadorMayoresDe12++;
-                    }
-                }
-
-                function calcularPrecio () {
-                    let precioTotal = contadorMenoresDe12 * noches * PRECIO_MENORES_12 + contadorMayoresDe12 * noches * PRECIO_MAYORES_12;
-                    let precioConIVA = precioTotal * IVA
-                    console.log("Total con IVA incluido $" + precioConIVA);
-
-                }
-                
-                let mensaje = "Nombres y edades de las personas ingresadas";
-                personas.forEach((persona, index) => {
-                    mensaje += `${index + 1}. Nombre: ${persona.nombre}, Edad: ${persona.edad}\n`;
-                });
-
-                mensaje += `Cantidad de menores de 12: ${contadorMenoresDe12}. Cantidad de mayores de 12: ${contadorMayoresDe12} personas.`;
-
-                console.log(mensaje);
-                }
-
-            }
-    }else{
-        alert("Debés ser mayor de 18 años para realizar una reserva.")
+document.addEventListener('DOMContentLoaded', function() {
+    const edadInput = document.getElementById('edad');
+    const otrosCampos = document.getElementById('otrosCampos');
+    const aviso = document.getElementById('aviso');
+    
+    const edadGuardada = localStorage.getItem('edad');
+    if (edadGuardada) {
+        edadInput.value = edadGuardada;
+        edadInput.dispatchEvent(new Event('input'));
     }
 
-    calcularPrecio();
+    edadInput.addEventListener('input', function() {
+        const edad = parseInt(edadInput.value, 10);
+        if (edad >= 18) {
+            otrosCampos.style.display = 'block';
+            aviso.style.display = 'none';
+        } else {
+            otrosCampos.style.display = 'none';
+            aviso.style.display = 'block';
+        }
+
+        localStorage.setItem('edad', edad);    
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('calcularPrecio').addEventListener('click', function(){
+        const noches = parseInt(document.getElementById('noches').value, 10) || 0;
+        const huespedesMayores = parseInt(document.getElementById('huespedesMayores').value, 10) || 0;
+        const huespedesMenores = parseInt(document.getElementById('huespedesMenores').value, 10) || 0;
+        const desayuno = document.getElementById('desayuno').checked;
+
+        localStorage.setItem('noches', noches);
+        localStorage.setItem('huespedesMayores', huespedesMayores);
+        localStorage.setItem('huespedesMenores', huespedesMenores);
+        localStorage.setItem('desayuno', desayuno);
+        
+        const precioMayores = 12000;
+        const precioMenores = 10000;
+        const precioDesayuno = 2500;
+
+        let total = (huespedesMayores * precioMayores + huespedesMenores * precioMenores) * noches;
+        if (desayuno) {
+            total += (huespedesMayores + huespedesMenores) * precioDesayuno * noches;
+        }
+
+        document.getElementById('precioTotal').innerHTML = `El precio de la reserva es $${total}`;
+
+    })
+
+    const nochesGuardadas = localStorage.getItem('noches');
+    const huespedesMayoresGuardados = localStorage.getItem('huespedesMayores');
+    const huespedesMenoresGuardados = localStorage.getItem('huespedesMenores');
+    const desayunoGuardado = localStorage.getItem('desayuno');
+
+    if (nochesGuardadas !== null) document.getElementById('noches').value = nochesGuardadas;
+    if (huespedesMayoresGuardados !== null) document.getElementById('huespedesMayores').value = huespedesMayoresGuardados;
+    if (huespedesMenoresGuardados !== null) document.getElementById('huespedesMenores').value = huespedesMenoresGuardados;
+    if (desayunoGuardado !== null) document.getElementById('desayuno').checked = desayunoGuardado === 'true';
+    
+})
